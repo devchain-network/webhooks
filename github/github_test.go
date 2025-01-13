@@ -367,6 +367,16 @@ func TestWebhooks(t *testing.T) {
 			},
 		},
 		{
+			name:     "PingEvent",
+			event:    PingEvent,
+			typ:      PingOrganizationPayload{},
+			filename: "../testdata/github/ping-organization.json",
+			headers: http.Header{
+				"X-Github-Event":                         []string{"ping"},
+				"X-GitHub-Hook-Installation-Target-Type": []string{"organization"},
+			},
+		},
+		{
 			name:     "ProjectCardEvent",
 			event:    ProjectCardEvent,
 			typ:      ProjectCardPayload{},
