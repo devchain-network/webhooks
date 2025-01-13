@@ -90,6 +90,15 @@ const (
 	IssueSubtype  EventSubtype = "issues"
 )
 
+// InstallationTargetType defines a GitHub Hook HTTP Header type
+type InstallationTargetType string
+
+// GitHub hook HTTP header installation target types
+const (
+	InstallationTargetTypeRepository   InstallationTargetType = "repository"
+	InstallationTargetTypeOrganization InstallationTargetType = "organization"
+)
+
 // Option is a configuration option for the webhook
 type Option func(*Webhook) error
 
@@ -176,6 +185,12 @@ func (hook Webhook) Parse(r *http.Request, events ...Event) (interface{}, error)
 		if !hmac.Equal([]byte(signature), []byte(expectedMAC)) {
 			return nil, ErrHMACVerificationFailed
 		}
+	}
+
+	targetType := InstallationTargetTypeRepository
+	instTargetType := InstallationTargetType(r.Header.Get("X-GitHub-Hook-Installation-Target-Type"))
+	if instTargetType == InstallationTargetTypeOrganization {
+		targetType = InstallationTargetTypeOrganization
 	}
 
 	switch gitHubEvent {
@@ -272,7 +287,12 @@ func (hook Webhook) Parse(r *http.Request, events ...Event) (interface{}, error)
 		err = json.Unmarshal([]byte(payload), &pl)
 		return pl, err
 	case PingEvent:
-		var pl PingPayload
+		if targetType == InstallationTargetTypeRepository {
+			var pl PingPayload
+			err = json.Unmarshal([]byte(payload), &pl)
+			return pl, err
+		}
+		var pl PingOrganizationPayload
 		err = json.Unmarshal([]byte(payload), &pl)
 		return pl, err
 	case ProjectCardEvent:

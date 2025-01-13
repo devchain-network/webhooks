@@ -3336,6 +3336,64 @@ type PingPayload struct {
 	} `json:"sender"`
 }
 
+// PingOrganizationPayload contains the information for GitHub's organization ping hook event
+type PingOrganizationPayload struct {
+	Zen    string `json:"zen"`
+	HookID int    `json:"hook_id"`
+	Hook   struct {
+		Type   string   `json:"type"`
+		ID     int64    `json:"id"`
+		Name   string   `json:"name"`
+		Active bool     `json:"active"`
+		Events []string `json:"events"`
+		Config struct {
+			ContentType string `json:"content_type"`
+			InsecureSSL string `json:"insecure_ssl"`
+			Secret      string `json:"secret"`
+			URL         string `json:"url"`
+		} `json:"config"`
+		UpdatedAt     time.Time `json:"updated_at"`
+		CreatedAt     time.Time `json:"created_at"`
+		URL           string    `json:"url"`
+		PingURL       string    `json:"ping_url"`
+		DeliveriesURL string    `json:"deliveries_url"`
+	} `json:"hook"`
+	Organization struct {
+		Login            string `json:"login"`
+		ID               int64  `json:"id"`
+		NodeID           string `json:"node_id"`
+		URL              string `json:"url"`
+		ReposURL         string `json:"repos_url"`
+		EventsURL        string `json:"events_url"`
+		HooksURL         string `json:"hooks_url"`
+		IssuesURL        string `json:"issues_url"`
+		MembersURL       string `json:"members_url"`
+		PublicMembersURL string `json:"public_members_url"`
+		AvatarURL        string `json:"avatar_url"`
+		Description      string `json:"description"`
+	} `json:"organization"`
+	Sender struct {
+		Login             string `json:"login"`
+		ID                int64  `json:"id"`
+		NodeID            string `json:"node_id"`
+		AvatarURL         string `json:"avatar_url"`
+		GravatarID        string `json:"gravatar_id"`
+		URL               string `json:"url"`
+		HTMLURL           string `json:"html_url"`
+		FollowersURL      string `json:"followers_url"`
+		FollowingURL      string `json:"following_url"`
+		GistsURL          string `json:"gists_url"`
+		StarredURL        string `json:"starred_url"`
+		SubscriptionsURL  string `json:"subscriptions_url"`
+		OrganizationsURL  string `json:"organizations_url"`
+		ReposURL          string `json:"repos_url"`
+		EventsURL         string `json:"events_url"`
+		ReceivedEventsURL string `json:"received_events_url"`
+		Type              string `json:"type"`
+		SiteAdmin         bool   `json:"site_admin"`
+	} `json:"sender"`
+}
+
 // ProjectCardPayload contains the information for GitHub's project_payload hook event
 type ProjectCardPayload struct {
 	Action      string `json:"action"`
